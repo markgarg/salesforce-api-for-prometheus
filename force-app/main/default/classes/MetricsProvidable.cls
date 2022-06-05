@@ -1,3 +1,5 @@
+// Can't expose Organization table to site guest user, hence suppressing it.
+@SuppressWarnings('PMD.ApexCRUDViolation')
 public without sharing abstract class MetricsProvidable {
 	public static final String LABEL_ENVIRONMENT_PRODUCTION = 'prod';
 	public static final String LABEL_ENVIRONMENT_NONTPRODUCTION = 'int';
@@ -7,7 +9,7 @@ public without sharing abstract class MetricsProvidable {
 	public MetricsModel model {get; set;}
 
 	public MetricsProvidable() {
-		List<Organization> orgs = [SELECT IsSandbox FROM Organization WITH SECURITY_ENFORCED];
+		List<Organization> orgs = [SELECT IsSandbox FROM Organization];
 		environment = (!orgs.isEmpty() && orgs[0].IsSandbox)
 			? LABEL_ENVIRONMENT_NONTPRODUCTION
 			: LABEL_ENVIRONMENT_PRODUCTION;
